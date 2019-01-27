@@ -1,0 +1,51 @@
+{
+  "name": "neuralnetjs",
+  "version": "1.0.0",
+  "description": "A simple straightforward Neural Network library written in Javascript",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1",
+    "start": "node testnn.js",
+    "start:nn": "ts-node ./src/NeuralNet.ts"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/vickylance/NeuralNetJS.git"
+  },
+  "keywords": [
+    "Neural",
+    "Net",
+    "NN",
+    "AI",
+    "ML",
+    "DL",
+    "Artificial",
+    "Intelligence",
+    "Deep",
+    "Learning"
+  ],
+  "author": "Vignesh S",
+  "license": "MIT",
+  "bugs": {
+    "url": "https://github.com/vickylance/NeuralNetJS/issues"
+  },
+  "homepage": "https://github.com/vickylance/NeuralNetJS#readme",
+  "dependencies": {
+    "@types/lodash": "^4.14.119",
+    "@types/mathjs": "^4.4.4",
+    "@types/node": "^10.12.18",
+    "@types/numjs": "^0.14.4",
+    "colors": "^1.1.2",
+    "csvtojson": "^1.1.9",
+    "lodash": "^4.17.11",
+    "mathjs": "^4.0.0",
+    "numjs": "^0.16.0",
+    "uuid": "^3.3.2"
+  },
+  "devDependencies": {
+    "eslint-config-airbnb-base": "^12.1.0",
+    "eslint-plugin-import": "^2.14.0",
+    "ts-node": "^7.0.1",
+    "typescript": "^3.2.2"
+  }
+}
