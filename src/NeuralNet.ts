@@ -1,9 +1,10 @@
 import Activations from "./Activations";
-import * as math from "mathjs";
+import Loss from "./Loss";
+import SaveLoad from './SaveLoad';
 import Logger, { LogType } from "./Logger";
+import * as math from "mathjs";
 import * as _ from "lodash";
 import "colors";
-import Loss from "./Loss";
 
 enum LayerType {
   Input,
@@ -23,18 +24,36 @@ function print(value) {
 }
 
 class NeuralNet {
+  // extension modules
   public static Activation = Activations;
   public static LayerType = LayerType;
   public static loss = Loss;
-  private computedLoss: number;
-  private layers: Array<INeuralNetConfig>;
-  private actualOutput: Array<number>;
-  private weights = [];
-  private computedWeights = [];
-  private bias = [];
+  public static SaveLoad = SaveLoad;
 
-  constructor(layers: Array<INeuralNetConfig>) {
+  // public accessors
+  public debug: boolean = false; // enable to get more logs
+  public learningRate: number = 0.01;
+  public epoch: number = 2000;
+  public costFunction: Function;
+
+  private layers: Array<INeuralNetConfig>; // layer configuration for the network
+  private actualOutput: Array<number>; // holds the target value
+  private weights = []; // holds the weight natrix
+  private bias = []; // holds the bias matrix
+  private netInputs = []; // holds the calculated weight before passing into activation function
+  private netOutputs = []; // holds the calculated weight after passing into activation function
+  private correctedWeights = []; // holds the corrected weights to be updated after back propagation
+  private loss = []; // holds the loss matrix
+  private totalLoss: number; // sum of the above loss matrix
+
+  constructor(layers: Array<INeuralNetConfig>, options: any) {
     this.layers = layers;
+
+    // assign options
+    this.costFunction = options.costFunction || Loss.MSE;
+    this.debug = options.debug || this.debug;
+    this.learningRate = options.learningRate || this.learningRate;
+    this.epoch = options.epoch || this.epoch;
 
     // initialize the random weights for weight matrix and bias
     this.initializeRandomWeights();
@@ -48,8 +67,14 @@ class NeuralNet {
       ]) as math.Matrix);
       this.bias.push(math.random([1, this.layers[idx].nodes]) as math.Matrix);
 
-      Logger.debug(LogType.Info, "Weights: ", math.size(this.weights[idx - 1]));
-      Logger.debug(LogType.Info, "Bias: ", math.size(this.bias[idx - 1]));
+      if(this.debug) {
+        Logger.debug(LogType.Info, "Initializing Weights...");
+        Logger.debug(LogType.Info, "Weights: ", this.weights[idx - 1]);
+        Logger.debug(LogType.Info, "Weights Size: ", math.size(this.weights[idx - 1]));
+        Logger.debug(LogType.Info, "Initializing Bias...");
+        Logger.debug(LogType.Info, "Bias: ", this.bias[idx - 1]);
+        Logger.debug(LogType.Info, "Bias Size: ", math.size(this.bias[idx - 1]));
+      }
     }
   }
 
@@ -57,13 +82,25 @@ class NeuralNet {
     return this.weights;
   }
 
-  calculateActivation(input) {}
-
-  calculateLoss(calculatedOp, actualOp) {
-    this.computedLoss = NeuralNet.loss.CROSSENTROPY(calculatedOp, actualOp);
+  private calculateLoss(actualOp) {
+    this.loss = this.costFunction(_.last(this.netOutputs), actualOp);
+    this.totalLoss = math.sum(this.loss);
   }
 
-  backProp() {}
+  private backProp(actualOp) {
+    let lossDerivative = this.costFunction(_.last(this.netOutputs), actualOp, true);
+    console.log("Loss Matrix Derivative: ", lossDerivative);
+    let outputDerivative = this.layers[this.layers.length - 1].activation(_.last(this.netOutputs), true);
+    console.log("Output Layer Derivative: ", outputDerivative);
+    let correctLastWeight = math.subtract(_.last(this.weights), this.learningRate * math.multiply(
+      math.multiply(lossDerivative, outputDerivative), _.last(this.weights)
+    ))
+    console.log("Corrected Last Weights: ", correctLastWeight);
+    // for (let idx = 0; idx < this.weights.length; idx++) {
+    //   const element = this.weights[idx];
+      
+    // }
+  }
 
   forwardProp(input) {
     if (math.size(input)[0] !== math.size(this.weights[0])[0]) {
@@ -78,20 +115,21 @@ class NeuralNet {
       return;
     }
     for (let idx = 0; idx < this.weights.length; idx++) {
-      let hiddenLayer = math.add(
+      this.netInputs.push(math.add(
         math.multiply(
-          idx === 0 ? input : this.computedWeights[idx - 1],
+          idx === 0 ? input : this.netOutputs[idx - 1],
           this.weights[idx]
         ),
         this.bias[idx][0]
-      );
-      // console.log("hiddenlayer Type", typeof hiddenLayer);
-      console.log("hiddenLayer", hiddenLayer);
-      this.computedWeights.push(this.layers[idx + 1].activation(hiddenLayer));
+      ));
+      this.netOutputs.push(this.layers[idx + 1].activation(_.last(this.netInputs)));
     }
-    console.log("this.computedWeights: ", this.computedWeights);
-    this.calculateLoss(_.last(this.computedWeights), this.actualOutput);
-    console.log("this.computedLoss: ", this.computedLoss);
+    console.log("Net Inputs: ", this.netInputs);
+    console.log("Net Outputs: ", this.netOutputs);
+    this.calculateLoss(this.actualOutput);
+    console.log("Loss Matrix: ", this.loss);
+    console.log("Total Loss: ", this.totalLoss);
+    this.backProp(this.actualOutput);
   }
 
   train(inputs: Array<number>, outputs: Array<number>) {

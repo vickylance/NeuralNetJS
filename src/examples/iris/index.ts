@@ -20,7 +20,12 @@ let nn = new NeuralNet([
     type: NeuralNet.LayerType.Output,
     activation: NeuralNet.Activation.SOFTMAX
   }
-]);
+], {
+  debug: false,
+  learningRate: 0.01,
+  epoch: 2000,
+  lossFunction: NeuralNet.loss.MSE
+});
 
 nn.train([5.1, 3.5, 1.4, 0.2], [1, 0, 0]);
 
