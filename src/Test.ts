@@ -1,4 +1,4 @@
-// import { NeuralNet } from "./NeuralNet";
+// import NeuralNet from "./NeuralNet";
 
 // let nn = new NeuralNet({
 //     inputs: 5,

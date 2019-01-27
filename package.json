@@ -4,9 +4,7 @@
   "description": "A simple straightforward Neural Network library written in Javascript",
   "main": "index.js",
   "scripts": {
-    "test": "echo \"Error: no test specified\" && exit 1",
-    "start": "node testnn.js",
-    "start:nn": "ts-node ./src/NeuralNet.ts",
+    "start:iris": "ts-node ./src/examples/iris/index.ts",
     "docs:build": "typedoc --out ./docs ./src/NeuralNet.ts --name NeuralNetJS --module commonjs --target ES5 --tsconfig ./tsconfig.json --readme ./README.md",
     "docs:serve": "cd ./docs && http-server -p 5555"
   },
