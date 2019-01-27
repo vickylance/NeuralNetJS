@@ -1,6 +1,5 @@
 import Activations from "./Activations";
 import * as math from "mathjs";
-import * as nj from "numjs";
 import Logger, { LogType } from "./Logger";
 import * as _ from "lodash";
 import "colors";

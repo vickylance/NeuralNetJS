@@ -6,7 +6,9 @@
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1",
     "start": "node testnn.js",
-    "start:nn": "ts-node ./src/NeuralNet.ts"
+    "start:nn": "ts-node ./src/NeuralNet.ts",
+    "docs:build": "typedoc --out ./docs ./src/NeuralNet.ts --name NeuralNetJS --module commonjs --target ES5 --tsconfig ./tsconfig.json --readme ./README.md",
+    "docs:serve": "cd ./docs && http-server -p 5555"
   },
   "repository": {
     "type": "git",
@@ -45,7 +47,9 @@
   "devDependencies": {
     "eslint-config-airbnb-base": "^12.1.0",
     "eslint-plugin-import": "^2.14.0",
+    "http-server": "^0.11.1",
     "ts-node": "^7.0.1",
+    "typedoc": "^0.14.2",
     "typescript": "^3.2.2"
   }
 }
