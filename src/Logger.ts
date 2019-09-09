@@ -9,7 +9,9 @@ export enum LogType {
 
 class Logger {
   public static debug(logType: LogType = LogType.Info, ...text: any) {
-    let textConcat = text.map(txt => JSON.stringify(txt) || txt).join("\t");
+    let textConcat = text
+      .map((txt: string) => JSON.stringify(txt) || txt)
+      .join("\t");
     if (logType === LogType.Error) {
       process.stdout.write(red("ERROR: "));
       console.error(textConcat);

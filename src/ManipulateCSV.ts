@@ -1,16 +1,18 @@
+const csv = require("csvtojson");
+const fs = require("fs");
+import Logger from "./Logger";
 
-const csv = require('csvtojson');
-const fs = require('fs');
-import Logger from './Logger';
+let trainOP: Array<Array<string>> = [];
+let trainIP: Array<Array<string>> = [];
 
 csv()
-  .fromFile('./train.csv')
-  .on('json', (jsonObj) => {
+  .fromFile("./train.csv")
+  .on("json", (jsonObj: Array<string>) => {
     const temp = Object.values(jsonObj);
     trainOP.push(temp.slice(temp.length - 1, temp.length));
     trainIP.push(temp.slice(0, temp.length - 1));
   })
-  .on('done', (error) => {
+  .on("done", error => {
     if (error) {
       throw error;
     }
@@ -22,5 +24,5 @@ csv()
       nn.train(trainIP[randomIndex], opCreator(trainOP[randomIndex][0]));
     }
     Logger.debug(opCreator(trainOP[2][0]), LoggerType.Warn);
-    Logger.debug('end', LoggerType.Info);
+    Logger.debug("end", LoggerType.Info);
   });

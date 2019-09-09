@@ -7,11 +7,11 @@ class Activations {
     derivative: boolean = false
   ): Array<number> {
     if (!derivative) {
-      return each(X, x => {
+      return each(X, (x: number) => {
         return 1 / (1 + Math.exp(-x));
       });
     }
-    return each(X, x => x * (1 - x));
+    return each(X, (x: number) => x * (1 - x));
   }
 
   // Range [0, INFINITY)
@@ -20,9 +20,9 @@ class Activations {
     derivative: boolean = false
   ): Array<number> {
     if (!derivative) {
-      return each(X, x => (x < 0 ? 0 : x));
+      return each(X, (x: number) => (x < 0 ? 0 : x));
     }
-    return each(X, x => (x < 0 ? 0 : 1));
+    return each(X, (x: number) => (x < 0 ? 0 : 1));
   }
 
   // public static SWISH(X: object, derivative: boolean = false): object {
@@ -76,9 +76,8 @@ class Activations {
   public static SOFTMAX(
     X: Array<number>,
     derivative: boolean = false
-  ): Array<number> {
+  ): Array<number> | undefined {
     if (!derivative) {
-      console.log("softmax");
       let denominator = X.map(x => Math.exp(x)).reduce((a, b) => a + b);
       console.log("denominator: ", denominator);
       return X.map(x => {

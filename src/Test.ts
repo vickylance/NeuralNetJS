@@ -16,7 +16,7 @@
 //         value: 3,
 //         activation: NeuralNet.activation.SOFTMAX
 //     }
-// }); // this will create a empty nn with randomised weights
+// }); // this will create a empty nn with randomized weights
 
 // nn.addLayer({
 //     neurons: 10,

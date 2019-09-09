@@ -18,10 +18,10 @@ interface INeuralNetConfig {
   activation?: Function;
 }
 
-function print(value) {
-  const precision = 14;
-  console.log(math.format(value, precision));
-}
+// function print(value) {
+//   const precision = 14;
+//   console.log(math.format(value, precision));
+// }
 
 class NeuralNet {
   // extension modules
@@ -38,7 +38,7 @@ class NeuralNet {
 
   private layers: Array<INeuralNetConfig>; // layer configuration for the network
   private actualOutput: Array<number>; // holds the target value
-  private weights = []; // holds the weight natrix
+  private weights = []; // holds the weight matrix
   private bias = []; // holds the bias matrix
   private netInputs = []; // holds the calculated weight before passing into activation function
   private netOutputs = []; // holds the calculated weight after passing into activation function
