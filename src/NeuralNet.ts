@@ -1,6 +1,6 @@
 import Activations from "./Activations";
 import Loss from "./Loss";
-import SaveLoad from './SaveLoad';
+import SaveLoad from "./SaveLoad";
 import Logger, { LogType } from "./Logger";
 import * as math from "mathjs";
 import * as _ from "lodash";
@@ -67,13 +67,21 @@ class NeuralNet {
       ]) as math.Matrix);
       this.bias.push(math.random([1, this.layers[idx].nodes]) as math.Matrix);
 
-      if(this.debug) {
+      if (this.debug) {
         Logger.debug(LogType.Info, "Initializing Weights...");
         Logger.debug(LogType.Info, "Weights: ", this.weights[idx - 1]);
-        Logger.debug(LogType.Info, "Weights Size: ", math.size(this.weights[idx - 1]));
+        Logger.debug(
+          LogType.Info,
+          "Weights Size: ",
+          math.size(this.weights[idx - 1])
+        );
         Logger.debug(LogType.Info, "Initializing Bias...");
         Logger.debug(LogType.Info, "Bias: ", this.bias[idx - 1]);
-        Logger.debug(LogType.Info, "Bias Size: ", math.size(this.bias[idx - 1]));
+        Logger.debug(
+          LogType.Info,
+          "Bias Size: ",
+          math.size(this.bias[idx - 1])
+        );
       }
     }
   }
@@ -88,17 +96,29 @@ class NeuralNet {
   }
 
   private backProp(actualOp) {
-    let lossDerivative = this.costFunction(_.last(this.netOutputs), actualOp, true);
+    let lossDerivative = this.costFunction(
+      _.last(this.netOutputs),
+      actualOp,
+      true
+    );
     console.log("Loss Matrix Derivative: ", lossDerivative);
-    let outputDerivative = this.layers[this.layers.length - 1].activation(_.last(this.netOutputs), true);
+    let outputDerivative = this.layers[this.layers.length - 1].activation(
+      _.last(this.netOutputs),
+      true
+    );
     console.log("Output Layer Derivative: ", outputDerivative);
-    let correctLastWeight = math.subtract(_.last(this.weights), this.learningRate * math.multiply(
-      math.multiply(lossDerivative, outputDerivative), _.last(this.weights)
-    ))
+    let correctLastWeight = math.subtract(
+      _.last(this.weights),
+      this.learningRate *
+        math.multiply(
+          math.multiply(lossDerivative, outputDerivative),
+          _.last(this.weights)
+        )
+    );
     console.log("Corrected Last Weights: ", correctLastWeight);
     // for (let idx = 0; idx < this.weights.length; idx++) {
     //   const element = this.weights[idx];
-      
+
     // }
   }
 
@@ -115,14 +135,18 @@ class NeuralNet {
       return;
     }
     for (let idx = 0; idx < this.weights.length; idx++) {
-      this.netInputs.push(math.add(
-        math.multiply(
-          idx === 0 ? input : this.netOutputs[idx - 1],
-          this.weights[idx]
-        ),
-        this.bias[idx][0]
-      ));
-      this.netOutputs.push(this.layers[idx + 1].activation(_.last(this.netInputs)));
+      this.netInputs.push(
+        math.add(
+          math.multiply(
+            idx === 0 ? input : this.netOutputs[idx - 1],
+            this.weights[idx]
+          ),
+          this.bias[idx][0]
+        )
+      );
+      this.netOutputs.push(
+        this.layers[idx + 1].activation(_.last(this.netInputs))
+      );
     }
     console.log("Net Inputs: ", this.netInputs);
     console.log("Net Outputs: ", this.netOutputs);
