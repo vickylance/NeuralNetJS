@@ -34,9 +34,9 @@ class Activations {
   // Range (-1, 1)
   public static TANH(x: number, derivative: boolean = false): number {
     if (!derivative) {
-      return Math.tan(x);
+      return Math.tanh(x);
     }
-    return 1 - x * x;
+    return 1 - Math.pow(Activations.TANH(x), 2);
   }
 
   // Range (-PI/2, PI/2)
