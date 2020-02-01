@@ -42,7 +42,7 @@
     "lodash": "^4.17.11",
     "mathjs": "^6.2.1",
     "numjs": "^0.16.0",
-    "snyk": "^1.278.2",
+    "snyk": "^1.290.1",
     "uuid": "^3.3.2"
   },
   "devDependencies": {
