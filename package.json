@@ -8,7 +8,7 @@
     "docs:build": "typedoc --out ./docs ./src/NeuralNet.ts --name NeuralNetJS --module commonjs --target ES5 --tsconfig ./tsconfig.json --readme ./README.md",
     "docs:serve": "cd ./docs && http-server -p 5555",
     "snyk-protect": "snyk protect",
-    "prepublish": "npm run snyk-protect"
+    "prepublish": "yarn run snyk-protect"
   },
   "repository": {
     "type": "git",
@@ -40,7 +40,7 @@
     "csvtojson": "^2.0.10",
     "lodash": "^4.17.15",
     "mathjs": "^6.6.0",
-    "snyk": "^1.290.1",
+    "snyk": "^1.316.1",
     "uuid": "^3.4.0"
   },
   "devDependencies": {
